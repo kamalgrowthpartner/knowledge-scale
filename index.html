@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Scale — Tu ScalePlan</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#D4A843;--gold-light:#F5E6B8;--dark:#0A0A0A;--dark2:#111;--dark3:#1A1A1A;
+  --white:#FFFFFF;--muted:#9A9A9A;--border:rgba(255,255,255,0.08);
+  --radius:12px;--radius-lg:20px
+}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--white);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,10,0.9);backdrop-filter:blur(14px);border-bottom:0.5px solid var(--border)}
+.nav-logo{font-size:13px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+.nav-cta{background:var(--gold);color:var(--dark);font-size:13px;font-weight:700;padding:10px 22px;border:none;border-radius:50px;cursor:pointer;transition:transform 0.2s,opacity 0.2s;letter-spacing:0.3px}
+.nav-cta:hover{transform:scale(1.04);opacity:0.9}
+
+/* ── PÁGINAS ── */
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+
+/* ── LANDING ── */
+#page-landing{background:var(--dark)}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7rem 1.5rem 4rem;text-align:center;background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(212,168,67,0.13) 0%,transparent 65%)}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,168,67,0.1);border:0.5px solid rgba(212,168,67,0.3);border-radius:50px;padding:7px 16px;margin-bottom:2rem;font-size:12px;color:var(--gold);font-weight:600;letter-spacing:0.5px}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.social-proof{display:flex;align-items:center;gap:8px;margin-bottom:2rem;font-size:13px;color:var(--muted);justify-content:center;flex-wrap:wrap}
+.stars{color:var(--gold);letter-spacing:1px;font-size:13px}
+h1{font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:800;line-height:1.05;max-width:860px;margin-bottom:1.5rem;letter-spacing:-2px}
+h1 em{font-style:normal;color:var(--gold)}
+.hero-sub{font-size:clamp(15px,2vw,19px);color:var(--muted);max-width:580px;line-height:1.75;margin-bottom:1rem}
+.hero-pain{font-size:15px;color:rgba(255,255,255,0.5);max-width:520px;line-height:1.6;margin-bottom:2.5rem;font-style:italic}
+.proof-strip{display:flex;gap:2.5rem;flex-wrap:wrap;justify-content:center;border-top:0.5px solid var(--border);padding-top:2.5rem;margin-top:1rem}
+.proof-item{text-align:center}
+.proof-num{font-size:2rem;font-weight:800;color:var(--gold)}
+.proof-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.section-divider{height:0.5px;background:var(--border);margin:0 2rem}
+.section-tag{font-size:11px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:1.2rem;opacity:0.8}
+
+/* QUIEN SOY */
+.who-section{padding:6rem 1.5rem;max-width:1000px;margin:0 auto}
+.who-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+@media(max-width:700px){.who-grid{grid-template-columns:1fr}}
+.who-avatar-box{aspect-ratio:1;max-width:360px;border-radius:var(--radius-lg);background:var(--dark3);border:0.5px solid rgba(212,168,67,0.2);display:flex;align-items:center;justify-content:center;padding:2.5rem}
+.who-avatar-inner{display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center}
+.avatar-circle{width:90px;height:90px;border-radius:50%;background:rgba(212,168,67,0.12);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;color:var(--gold)}
+.avatar-name{font-size:15px;font-weight:700}
+.avatar-role{font-size:12px;color:var(--muted)}
+.who-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:0.5rem}
+.who-pill{background:rgba(212,168,67,0.1);border:0.5px solid rgba(212,168,67,0.25);border-radius:50px;padding:5px 12px;font-size:11px;color:var(--gold);font-weight:600}
+.who-content h2{font-size:clamp(1.8rem,3.5vw,2.7rem);font-weight:800;line-height:1.15;margin-bottom:1.2rem;letter-spacing:-1px}
+.who-content p{font-size:15px;color:rgba(255,255,255,0.7);line-height:1.8;margin-bottom:1rem}
+.who-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:1.8rem}
+.who-stat{background:var(--dark3);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px}
+.who-stat-n{font-size:1.6rem;font-weight:800;color:var(--gold)}
+.who-stat-l{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* TESTIMONIOS */
+.testimonials{padding:6rem 1.5rem;background:var(--dark2)}
+.testimonials-inner{max-width:1000px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:3.5rem}
+.section-header h2{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:0.8rem}
+.section-header p{font-size:15px;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.7}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.testi-card{background:var(--dark3);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:24px;position:relative;overflow:hidden;transition:border-color 0.2s}
+.testi-card:hover{border-color:rgba(212,168,67,0.3)}
+.testi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity 0.2s}
+.testi-card:hover::before{opacity:1}
+.testi-stars{color:var(--gold);font-size:13px;margin-bottom:12px;letter-spacing:2px}
+.testi-quote{font-size:15px;color:rgba(255,255,255,0.85);line-height:1.75;margin-bottom:18px;font-style:italic}
+.testi-quote strong{color:var(--gold);font-style:normal}
+.testi-author{display:flex;align-items:center;gap:10px;padding-top:14px;border-top:0.5px solid var(--border)}
+.testi-avatar{width:40px;height:40px;border-radius:50%;background:rgba(212,168,67,0.12);border:1px solid rgba(212,168,67,0.3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gold);flex-shrink:0}
+.testi-name{font-size:13px;font-weight:700}
+.testi-role{font-size:11px;color:var(--muted);margin-top:1px}
+.testi-result{display:inline-flex;align-items:center;gap:5px;background:rgba(212,168,67,0.12);border:0.5px solid rgba(212,168,67,0.25);border-radius:50px;padding:4px 10px;font-size:10px;color:var(--gold);font-weight:700;margin-top:8px;letter-spacing:0.5px}
+
+/* ── PÁGINA DATOS ── */
+#page-datos{background:var(--dark);display:none;align-items:center;justify-content:center;flex-direction:column;padding:6rem 1.5rem 3rem;text-align:center;min-height:100vh}
+#page-datos.active{display:flex}
+.form-card{background:var(--dark3);border:0.5px solid rgba(212,168,67,0.2);border-radius:var(--radius-lg);padding:2.5rem;max-width:480px;width:100%;position:relative;overflow:hidden}
+.form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.form-card h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;margin-bottom:0.5rem;letter-spacing:-0.5px}
+.form-card p{font-size:14px;color:var(--muted);margin-bottom:2rem;line-height:1.6}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+@media(max-width:480px){.form-row{grid-template-columns:1fr}}
+.form-input{width:100%;background:rgba(255,255,255,0.04);border:0.5px solid var(--border);border-radius:var(--radius);padding:13px 16px;color:var(--white);font-size:14px;outline:none;transition:border-color 0.2s;margin-bottom:0}
+.form-input::placeholder{color:var(--muted)}
+.form-input:focus{border-color:rgba(212,168,67,0.5)}
+.form-submit{width:100%;background:var(--gold);color:var(--dark);font-size:15px;font-weight:800;padding:15px;border:none;border-radius:50px;cursor:pointer;transition:all 0.2s;margin-top:14px}
+.form-submit:hover{transform:scale(1.02)}
+.form-note{font-size:11px;color:var(--muted);margin-top:10px;text-align:center}
+
+/* ── QUIZ ── */
+#page-quiz{background:var(--dark);display:none;align-items:center;justify-content:center;flex-direction:column;padding:5rem 1.5rem 3rem;text-align:center;min-height:100vh}
+#page-quiz.active{display:flex}
+.quiz-wrap{max-width:680px;width:100%}
+.quiz-prog-wrap{display:flex;align-items:center;gap:12px;margin-bottom:2.5rem;justify-content:center}
+.quiz-steps{display:flex;gap:6px}
+.quiz-step-dot{width:28px;height:4px;border-radius:2px;background:rgba(255,255,255,0.1);transition:background 0.3s}
+.quiz-step-dot.done{background:var(--gold)}
+.quiz-step-dot.active{background:rgba(212,168,67,0.5)}
+.quiz-counter{font-size:12px;color:var(--muted);white-space:nowrap}
+.quiz-label{font-size:11px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;opacity:0.8}
+.quiz-q{font-size:clamp(1.5rem,3.5vw,2.4rem);font-weight:800;line-height:1.15;margin-bottom:0.5rem;letter-spacing:-0.5px}
+.quiz-sub{font-size:14px;color:var(--muted);margin-bottom:2rem}
+.options-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;text-align:left}
+.opt{background:var(--dark3);border:0.5px solid var(--border);border-radius:var(--radius);padding:15px 16px;cursor:pointer;transition:all 0.2s;color:var(--white)}
+.opt:hover{border-color:rgba(212,168,67,0.4);background:rgba(212,168,67,0.05)}
+.opt.selected{border-color:var(--gold);background:rgba(212,168,67,0.1)}
+.opt-icon{font-size:17px;margin-bottom:5px;display:block}
+.opt-label{font-weight:700;font-size:13px}
+.opt-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.quiz-next{margin-top:1.8rem;background:var(--gold);color:var(--dark);font-size:15px;font-weight:700;padding:13px 34px;border:none;border-radius:50px;cursor:pointer;opacity:0.2;pointer-events:none;transition:all 0.2s}
+.quiz-next.on{opacity:1;pointer-events:all}
+.quiz-next.on:hover{transform:scale(1.03)}
+
+/* Pregunta 5 — texto libre */
+.open-textarea{width:100%;background:rgba(255,255,255,0.04);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;color:var(--white);font-size:15px;line-height:1.7;outline:none;resize:vertical;min-height:140px;transition:border-color 0.2s;font-family:inherit}
+.open-textarea::placeholder{color:var(--muted)}
+.open-textarea:focus{border-color:rgba(212,168,67,0.5)}
+.char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:6px}
+
+/* ── LOADING ── */
+#page-loading{background:var(--dark);display:none;align-items:center;justify-content:center;flex-direction:column;padding:3rem 1.5rem;text-align:center;min-height:100vh}
+#page-loading.active{display:flex}
+.spinner{width:50px;height:50px;border:2px solid rgba(212,168,67,0.15);border-top:2px solid var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:2rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-steps{margin-top:2rem;display:flex;flex-direction:column;gap:10px;max-width:300px}
+.ls-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);opacity:0;transition:opacity 0.4s}
+.ls-item.done{color:var(--gold);opacity:1}
+.ls-check{width:18px;height:18px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px}
+
+/* ── GAMEPLAN / CAPTURA ── */
+#page-gameplan{background:var(--dark);display:none;align-items:center;justify-content:center;flex-direction:column;padding:6rem 1.5rem 3rem;text-align:center;min-height:100vh}
+#page-gameplan.active{display:flex}
+.gp-preview{background:var(--dark3);border:0.5px solid rgba(212,168,67,0.25);border-radius:var(--radius-lg);padding:24px;max-width:500px;width:100%;margin-bottom:2.5rem;text-align:left;position:relative;overflow:hidden}
+.gp-preview::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.gp-tag{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.gp-title{font-size:20px;font-weight:800;margin-bottom:4px}
+.gp-stage{font-size:12px;color:var(--muted);margin-bottom:14px}
+.tl{display:flex;flex-direction:column}
+.tl-item{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:0.5px solid var(--border)}
+.tl-item:last-child{border-bottom:none}
+.tl-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:6px;flex-shrink:0}
+.tl-week{font-size:11px;color:var(--muted);min-width:65px}
+.tl-text{font-size:13px}
+.blur-overlay{position:absolute;bottom:0;left:0;right:0;height:130px;background:linear-gradient(transparent,var(--dark3));display:flex;align-items:flex-end;justify-content:center;padding-bottom:16px}
+.blur-msg{font-size:12px;color:var(--muted)}
+.gp-cta-title{font-size:clamp(1.4rem,3vw,2.1rem);font-weight:800;margin-bottom:0.5rem;letter-spacing:-0.5px}
+.gp-cta-sub{font-size:14px;color:var(--muted);margin-bottom:2rem}
+.gp-submit{background:var(--gold);color:var(--dark);font-size:16px;font-weight:800;padding:16px 40px;border:none;border-radius:50px;cursor:pointer;transition:all 0.2s}
+.gp-submit:hover{transform:scale(1.02)}
+
+/* ── THANK YOU ── */
+#page-ty{background:var(--dark);display:none;align-items:center;justify-content:center;flex-direction:column;padding:6rem 1.5rem 3rem;text-align:center;min-height:100vh}
+#page-ty.active{display:flex}
+.ty-icon{width:70px;height:70px;border-radius:50%;background:rgba(212,168,67,0.12);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--gold);font-weight:700;margin-bottom:2rem}
+.ty-card{background:var(--dark3);border:0.5px solid rgba(212,168,67,0.2);border-radius:var(--radius-lg);padding:24px;max-width:440px;width:100%;margin:1.5rem 0}
+.ty-steps{display:flex;flex-direction:column;gap:14px;text-align:left}
+.ty-step{display:flex;align-items:flex-start;gap:12px}
+.ty-num{width:26px;height:26px;border-radius:50%;background:rgba(212,168,67,0.12);border:0.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0}
+.ty-step-text{font-size:13px;color:var(--muted);line-height:1.6;padding-top:3px}
+.ty-step-text strong{color:var(--white)}
+
+/* Notificación CRM */
+.crm-notice{background:rgba(212,168,67,0.08);border:0.5px solid rgba(212,168,67,0.2);border-radius:var(--radius);padding:10px 16px;font-size:12px;color:var(--gold);margin-top:1rem;max-width:440px;text-align:center}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Knowledge Scale</div>
+</nav>
+
+<!-- ═══════════ LANDING ═══════════ -->
+<div class="page active" id="page-landing">
+
+  <section class="hero">
+    <div class="badge"><span class="badge-dot"></span>Consultoría gratuita · Disponible ahora</div>
+    <div class="social-proof">
+      <span class="stars">★★★★★</span>
+      <span>2/2 casos de éxito en 2026 ya tienen un negocio estable de manera online</span>
+    </div>
+    <h1>Deja de improvisar.<br>Empieza a <em>escalar</em> con un plan real.</h1>
+    <p class="hero-sub">Descubre exactamente qué pasos tomar para convertir tu conocimiento en un negocio de infoproductos rentable y predecible.</p>
+    <p class="hero-pain">"Ya sé que tengo algo valioso que enseñar... pero no sé por dónde empezar o por qué no consigo resultados consistentes."</p>
+    <div class="proof-strip">
+      <div class="proof-item"><div class="proof-num">2/2</div><div class="proof-label">Casos de éxito</div></div>
+      <div class="proof-item"><div class="proof-num">5</div><div class="proof-label">Preguntas clave</div></div>
+      <div class="proof-item"><div class="proof-num">7</div><div class="proof-label">Etapas de escala</div></div>
+      <div class="proof-item"><div class="proof-num">100%</div><div class="proof-label">Personalizado</div></div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- QUIEN SOY -->
+  <section class="who-section">
+    <div class="section-tag">Quién está detrás de Knowledge Scale</div>
+    <div class="who-grid">
+      <div class="who-avatar-box">
+        <div class="who-avatar-inner">
+          <div class="avatar-circle">KS</div>
+          <div class="avatar-name">Fundador · Knowledge Scale</div>
+          <div class="avatar-role">Estratega de Infoproductos</div>
+          <div class="who-pills">
+            <span class="who-pill">Marketing</span>
+            <span class="who-pill">Infoproductos</span>
+            <span class="who-pill">Escala</span>
+          </div>
+        </div>
+      </div>
+      <div class="who-content">
+        <h2>No soy un gurú.<br>Soy alguien que <em style="font-style:normal;color:var(--gold)">ya pasó</em> por donde estás.</h2>
+        <p>Empecé desde cero, sin audiencia, sin seguidores, sin un producto claro. Durante meses intenté todo lo que veía en internet — cursos, estrategias, fórmulas mágicas — y nada funcionaba de manera consistente.</p>
+        <p>Hasta que entendí una cosa: <strong style="color:var(--white)">no era falta de talento, era falta de un sistema.</strong> Construí Knowledge Scale para darte exactamente eso.</p>
+        <p>Hoy ayudo a emprendedores de habla hispana a convertir su expertise en ingresos predecibles, trabajando menos horas y vendiendo más.</p>
+        <div class="who-stats">
+          <div class="who-stat"><div class="who-stat-n">2/2</div>          <div class="who-stat-l">casos de éxito en 2026 con negocio estable</div></div>
+          <div class="who-stat"><div class="who-stat-n">100%</div><div class="who-stat-l">enfoque en resultados reales</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- TESTIMONIOS -->
+  <section class="testimonials">
+    <div class="testimonials-inner">
+      <div class="section-header">
+        <div class="section-tag" style="text-align:center">Lo que dicen los que ya lo hicieron</div>
+        <h2>Resultados reales,<br><em style="font-style:normal;color:var(--gold)">sin promesas vacías</em></h2>
+        <p>2 de 2 personas que siguieron el gameplan en 2026 tienen hoy un negocio de infoproductos estable y en crecimiento.</p>
+      </div>
+      <!-- VIDEO CAROUSEL -->
+      <div class="vid-carousel">
+        <div class="vid-track" id="vidTrack">
+
+          <div class="vid-slide active" data-index="0">
+            <div class="vid-frame">
+              <div class="vid-placeholder">
+                <div class="vid-play-icon">▶</div>
+                <div class="vid-info">
+                  <div class="vid-name">María C.</div>
+                  <div class="vid-role">Coach de productividad · España</div>
+                  <div class="vid-result">⚡ De $0 a $2,000/mes en 60 días</div>
+                </div>
+                <div class="vid-url-hint">Pega aquí tu URL de video</div>
+              </div>
+              <!-- Reemplaza el div.vid-placeholder por: <iframe src="TU_URL_EMBED" frameborder="0" allowfullscreen></iframe> -->
+            </div>
+            <div class="vid-caption">
+              <div class="vid-stars">★★★★★</div>
+              <div class="vid-quote">"De $0 a mis primeros $2,000/mes en solo 60 días."</div>
+            </div>
+          </div>
+
+          <div class="vid-slide" data-index="1">
+            <div class="vid-frame">
+              <div class="vid-placeholder">
+                <div class="vid-play-icon">▶</div>
+                <div class="vid-info">
+                  <div class="vid-name">Jorge R.</div>
+                  <div class="vid-role">Consultor de fitness · México</div>
+                  <div class="vid-result">⚡ Negocio estable en 6 meses</div>
+                </div>
+                <div class="vid-url-hint">Pega aquí tu URL de video</div>
+              </div>
+            </div>
+            <div class="vid-caption">
+              <div class="vid-stars">★★★★★</div>
+              <div class="vid-quote">"Hoy vivo de lo que me apasiona gracias a un plan claro."</div>
+            </div>
+          </div>
+
+          <div class="vid-slide" data-index="2">
+            <div class="vid-frame">
+              <div class="vid-placeholder">
+                <div class="vid-play-icon">▶</div>
+                <div class="vid-info">
+                  <div class="vid-name">Tu próximo testimonio</div>
+                  <div class="vid-role">Añade aquí tu tercer caso de éxito</div>
+                  <div class="vid-result">⚡ Resultado aquí</div>
+                </div>
+                <div class="vid-url-hint">Pega aquí tu URL de video</div>
+              </div>
+            </div>
+            <div class="vid-caption">
+              <div class="vid-stars">★★★★★</div>
+              <div class="vid-quote">"Tu cita de testimonio aquí."</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Controles -->
+        <button class="vid-btn vid-prev" onclick="moveCarousel(-1)" aria-label="Anterior">&#8592;</button>
+        <button class="vid-btn vid-next" onclick="moveCarousel(1)" aria-label="Siguiente">&#8594;</button>
+
+        <!-- Dots -->
+        <div class="vid-dots">
+          <span class="vid-dot active" onclick="goSlide(0)"></span>
+          <span class="vid-dot" onclick="goSlide(1)"></span>
+          <span class="vid-dot" onclick="goSlide(2)"></span>
+        </div>
+      </div>
+
+      <style>
+      .vid-carousel{position:relative;max-width:480px;margin:0 auto;user-select:none}
+      .vid-track{overflow:hidden;border-radius:var(--radius-lg)}
+      .vid-slide{display:none;flex-direction:column;gap:16px}
+      .vid-slide.active{display:flex}
+      .vid-frame{width:100%;aspect-ratio:9/16;max-height:520px;border-radius:var(--radius-lg);overflow:hidden;background:var(--dark3);border:0.5px solid rgba(212,168,67,0.2);position:relative}
+      .vid-frame iframe{width:100%;height:100%;border:none}
+      .vid-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:2rem;text-align:center;background:linear-gradient(160deg,#1a1a2e 0%,#0f0f1a 100%)}
+      .vid-play-icon{width:64px;height:64px;border-radius:50%;background:rgba(212,168,67,0.15);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold);cursor:pointer;transition:transform 0.2s}
+      .vid-play-icon:hover{transform:scale(1.1)}
+      .vid-info{display:flex;flex-direction:column;gap:4px}
+      .vid-name{font-size:16px;font-weight:700}
+      .vid-role{font-size:12px;color:var(--muted)}
+      .vid-result{font-size:11px;color:var(--gold);font-weight:600;margin-top:4px}
+      .vid-url-hint{font-size:10px;color:rgba(255,255,255,0.2);position:absolute;bottom:12px}
+      .vid-caption{text-align:center;padding:0 1rem}
+      .vid-stars{color:var(--gold);font-size:14px;letter-spacing:2px;margin-bottom:6px}
+      .vid-quote{font-size:14px;color:rgba(255,255,255,0.75);font-style:italic;line-height:1.6}
+      .vid-btn{position:absolute;top:42%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(10,10,10,0.8);border:0.5px solid rgba(212,168,67,0.3);color:var(--gold);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;z-index:10}
+      .vid-btn:hover{background:rgba(212,168,67,0.15);border-color:var(--gold)}
+      .vid-prev{left:-20px}
+      .vid-next{right:-20px}
+      .vid-dots{display:flex;justify-content:center;gap:8px;margin-top:16px}
+      .vid-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.15);cursor:pointer;transition:all 0.3s}
+      .vid-dot.active{background:var(--gold);transform:scale(1.2)}
+      </style>
+
+      <script>
+      let curSlide=0;const total=3;
+      function goSlide(n){
+        document.querySelectorAll('.vid-slide').forEach((s,i)=>{s.classList.toggle('active',i===n)});
+        document.querySelectorAll('.vid-dot').forEach((d,i)=>{d.classList.toggle('active',i===n)});
+        curSlide=n;
+      }
+      function moveCarousel(dir){
+        let next=(curSlide+dir+total)%total;
+        goSlide(next);
+      }
+      // Swipe táctil
+      let startX=0;
+      document.querySelector('.vid-track').addEventListener('touchstart',e=>{startX=e.touches[0].clientX});
+      document.querySelector('.vid-track').addEventListener('touchend',e=>{
+        let diff=startX-e.changedTouches[0].clientX;
+        if(Math.abs(diff)>40)moveCarousel(diff>0?1:-1);
+      });
+      </script>
+    </div>
+  </section>
+
+      <!-- CTA FINAL -->
+      <div style="display:flex;justify-content:center;padding:3rem 1.5rem 4rem;background:var(--dark2)">
+        <button class="nav-cta" style="font-size:15px;padding:14px 36px;border-radius:50px" onclick="goTo('page-datos')">Mi siguiente paso →</button>
+      </div>
+
+</div><!-- /page-landing -->
+
+<!-- ═══════════ DATOS ═══════════ -->
+<div class="page" id="page-datos" style="display:none;align-items:center;justify-content:center;flex-direction:column;padding:6rem 1.5rem 3rem;text-align:center;min-height:100vh">
+  <div class="form-card">
+    <div class="section-tag" style="text-align:center">Paso 1 de 2</div>
+    <h2>Cuéntanos quién eres</h2>
+    <p>Introduce tus datos para personalizar tu ScalePlan y enviártelo al instante.</p>
+    <div class="form-row">
+      <input class="form-input" type="text" id="fNombre" placeholder="Nombre" />
+      <input class="form-input" type="text" id="fApellido" placeholder="Apellido" />
+    </div>
+    <input class="form-input" type="email" id="fEmail" placeholder="Correo electrónico" style="width:100%;margin-bottom:10px" />
+    <input class="form-input" type="tel" id="fTel" placeholder="Número de teléfono (ej: +34 600 000 000)" style="width:100%" />
+    <button class="form-submit" onclick="submitDatos()">Continuar al quiz →</button>
+    <div class="form-note">Tus datos están seguros. Sin spam.</div>
+  </div>
+</div>
+
+<!-- ═══════════ QUIZ ═══════════ -->
+<div class="page" id="page-quiz" style="display:none;align-items:center;justify-content:center;flex-direction:column;padding:5rem 1.5rem 3rem;text-align:center;min-height:100vh">
+  <div class="quiz-wrap">
+    <div class="quiz-prog-wrap">
+      <div class="quiz-steps">
+        <div class="quiz-step-dot active" id="sd1"></div>
+        <div class="quiz-step-dot" id="sd2"></div>
+        <div class="quiz-step-dot" id="sd3"></div>
+        <div class="quiz-step-dot" id="sd4"></div>
+        <div class="quiz-step-dot" id="sd5"></div>
+      </div>
+      <div class="quiz-counter" id="qcounter">Pregunta 1 de 5</div>
+    </div>
+
+    <!-- P1: Sector -->
+    <div id="q1" class="quiz-step-wrap">
+      <div class="quiz-label">Tu sector</div>
+      <div class="quiz-q">¿En qué sector vendes tu conocimiento?</div>
+      <p class="quiz-sub">Selecciona el que mejor te describe.</p>
+      <div class="options-grid">
+        <div class="opt" onclick="pick(this,'sector','Salud y bienestar')"><span class="opt-icon">🏃</span><div class="opt-label">Salud y bienestar</div><div class="opt-desc">Fitness, nutrición, mindset</div></div>
+        <div class="opt" onclick="pick(this,'sector','Negocios y marketing')"><span class="opt-icon">📈</span><div class="opt-label">Negocios y marketing</div><div class="opt-desc">Ventas, ads, emprendimiento</div></div>
+        <div class="opt" onclick="pick(this,'sector','Desarrollo personal')"><span class="opt-icon">🧠</span><div class="opt-label">Desarrollo personal</div><div class="opt-desc">Productividad, hábitos, liderazgo</div></div>
+        <div class="opt" onclick="pick(this,'sector','Finanzas e inversión')"><span class="opt-icon">💰</span><div class="opt-label">Finanzas e inversión</div><div class="opt-desc">Trading, ahorro, inmuebles</div></div>
+        <div class="opt" onclick="pick(this,'sector','Tecnología y educación')"><span class="opt-icon">💻</span><div class="opt-label">Tecnología y educación</div><div class="opt-desc">Programación, idiomas, diseño</div></div>
+        <div class="opt" onclick="pick(this,'sector','Otro')"><span class="opt-icon">✨</span><div class="opt-label">Otro sector</div><div class="opt-desc">No está en la lista</div></div>
+      </div>
+      <button class="quiz-next" id="qnext1" onclick="nextQ(2)">Siguiente →</button>
+    </div>
+
+    <!-- P2: Tiempo -->
+    <div id="q2" class="quiz-step-wrap" style="display:none">
+      <div class="quiz-label">Tu experiencia</div>
+      <div class="quiz-q">¿Cuánto tiempo llevas en el mundo de los infoproductos?</div>
+      <p class="quiz-sub">Incluye tiempo aprendiendo aunque no hayas vendido aún.</p>
+      <div class="options-grid">
+        <div class="opt" onclick="pick(this,'tiempo','Menos de 6 meses')"><span class="opt-icon">🌱</span><div class="opt-label">Menos de 6 meses</div><div class="opt-desc">Justo empezando</div></div>
+        <div class="opt" onclick="pick(this,'tiempo','6 meses – 1 año')"><span class="opt-icon">🔍</span><div class="opt-label">6 meses – 1 año</div><div class="opt-desc">Explorando el mercado</div></div>
+        <div class="opt" onclick="pick(this,'tiempo','1 – 2 años')"><span class="opt-icon">📚</span><div class="opt-label">1 – 2 años</div><div class="opt-desc">Algunas ventas, poca consistencia</div></div>
+        <div class="opt" onclick="pick(this,'tiempo','2 – 4 años')"><span class="opt-icon">🚀</span><div class="opt-label">2 – 4 años</div><div class="opt-desc">Con experiencia, buscando escala</div></div>
+        <div class="opt" onclick="pick(this,'tiempo','Más de 4 años')"><span class="opt-icon">🏆</span><div class="opt-label">Más de 4 años</div><div class="opt-desc">Veterano, optimizando</div></div>
+      </div>
+      <button class="quiz-next" id="qnext2" onclick="nextQ(3)">Siguiente →</button>
+    </div>
+
+    <!-- P3: Ingresos -->
+    <div id="q3" class="quiz-step-wrap" style="display:none">
+      <div class="quiz-label">Tu facturación</div>
+      <div class="quiz-q">¿Cuál es tu facturación mensual actual?</div>
+      <p class="quiz-sub">Sé honesto — esto define tu gameplan exacto.</p>
+      <div class="options-grid">
+        <div class="opt" onclick="pick(this,'ingresos','$0 – $1,000/mes')"><span class="opt-icon">🌱</span><div class="opt-label">$0 – $1,000 / mes</div><div class="opt-desc">Empezando a construir</div></div>
+        <div class="opt" onclick="pick(this,'ingresos','$1,000 – $5,000/mes')"><span class="opt-icon">📈</span><div class="opt-label">$1,000 – $5,000 / mes</div><div class="opt-desc">Primeras ventas</div></div>
+        <div class="opt" onclick="pick(this,'ingresos','$5,000 – $15,000/mes')"><span class="opt-icon">🚀</span><div class="opt-label">$5,000 – $15,000 / mes</div><div class="opt-desc">Crecimiento activo</div></div>
+        <div class="opt" onclick="pick(this,'ingresos','$15,000 – $50,000/mes')"><span class="opt-icon">⚡</span><div class="opt-label">$15,000 – $50,000 / mes</div><div class="opt-desc">Escalando</div></div>
+        <div class="opt" onclick="pick(this,'ingresos','$50,000+/mes')"><span class="opt-icon">💎</span><div class="opt-label">$50,000+ / mes</div><div class="opt-desc">Liderando el mercado</div></div>
+      </div>
+      <button class="quiz-next" id="qnext3" onclick="nextQ(4)">Siguiente →</button>
+    </div>
+
+    <!-- P4: Cuello de botella -->
+    <div id="q4" class="quiz-step-wrap" style="display:none">
+      <div class="quiz-label">Tu mayor freno</div>
+      <div class="quiz-q">¿Cuál es tu principal cuello de botella ahora mismo?</div>
+      <p class="quiz-sub">Elige el que más te frena cada día.</p>
+      <div class="options-grid">
+        <div class="opt" onclick="pick(this,'cuello','No sé cómo posicionarme')"><span class="opt-icon">🎯</span><div class="opt-label">Posicionamiento</div><div class="opt-desc">No sé cómo diferenciarme</div></div>
+        <div class="opt" onclick="pick(this,'cuello','No genero suficientes leads')"><span class="opt-icon">🔥</span><div class="opt-label">Falta de leads</div><div class="opt-desc">Poca gente interesada</div></div>
+        <div class="opt" onclick="pick(this,'cuello','No convierto mis leads en clientes')"><span class="opt-icon">💬</span><div class="opt-label">Baja conversión</div><div class="opt-desc">Hablo con gente pero no compran</div></div>
+        <div class="opt" onclick="pick(this,'cuello','No tengo un sistema de ventas')"><span class="opt-icon">⚙️</span><div class="opt-label">Sin sistema</div><div class="opt-desc">Todo depende de mí</div></div>
+        <div class="opt" onclick="pick(this,'cuello','No tengo audiencia suficiente')"><span class="opt-icon">📱</span><div class="opt-label">Sin audiencia</div><div class="opt-desc">Poca visibilidad online</div></div>
+        <div class="opt" onclick="pick(this,'cuello','Tengo ventas pero no escalo')"><span class="opt-icon">📊</span><div class="opt-label">Techo de ingresos</div><div class="opt-desc">Estoy estancado en el mismo nivel</div></div>
+      </div>
+      <button class="quiz-next" id="qnext4" onclick="nextQ(5)">Última pregunta →</button>
+    </div>
+
+    <!-- P5: Por qué cree que está estancado -->
+    <div id="q5" class="quiz-step-wrap" style="display:none">
+      <div class="quiz-label">Tu diagnóstico</div>
+      <div class="quiz-q">¿Por qué crees que estás estancado?</div>
+      <p class="quiz-sub">Sé específico. Esta respuesta es la que más personaliza tu gameplan.</p>
+      <textarea class="open-textarea" id="q5text" placeholder="Ej: Creo que mi mayor problema es que no tengo un sistema claro para generar leads de forma constante. Publico en redes pero no veo resultados..." oninput="checkQ5()"></textarea>
+      <div class="char-count" id="charCount">0 / mínimo 30 caracteres</div>
+      <button class="quiz-next" id="qnext5" onclick="goLoading()">Generar mi Gameplan →</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════ LOADING ═══════════ -->
+<div class="page" id="page-loading" style="display:none;align-items:center;justify-content:center;flex-direction:column;padding:3rem 1.5rem;text-align:center;min-height:100vh">
+  <div class="spinner"></div>
+  <div style="font-size:22px;font-weight:700;margin-bottom:0.5rem">Construyendo tu Gameplan...</div>
+  <div style="font-size:14px;color:var(--muted)">Analizando tus respuestas</div>
+  <div class="loading-steps">
+    <div class="ls-item" id="ls1"><div class="ls-check">✓</div> Analizando tu sector y etapa</div>
+    <div class="ls-item" id="ls2"><div class="ls-check">✓</div> Identificando tu cuello de botella</div>
+    <div class="ls-item" id="ls3"><div class="ls-check">✓</div> Calculando tu hoja de ruta personalizada</div>
+    <div class="ls-item" id="ls4"><div class="ls-check">✓</div> Guardando tu perfil en el sistema</div>
+    <div class="ls-item" id="ls5"><div class="ls-check">✓</div> Gameplan listo</div>
+  </div>
+</div>
+
+<!-- ═══════════ GAMEPLAN ═══════════ -->
+<div class="page" id="page-gameplan" style="display:none;align-items:center;justify-content:center;flex-direction:column;padding:6rem 1.5rem 3rem;text-align:center;min-height:100vh">
+  <div class="gp-preview">
+    <div class="gp-tag">Knowledge Scale · ScalePlan Personalizado</div>
+    <div class="gp-title" id="gp-title">Tu Hoja de Ruta</div>
+    <div class="gp-stage" id="gp-stage"></div>
+    <div class="tl" id="gp-timeline"></div>
+    <div class="blur-overlay"><div class="blur-msg">Tu ScalePlan completo llega a tu email</div></div>
+  </div>
+  <div class="gp-cta-title" id="gp-cta-name">Ya sabemos tu situación actual</div>
+  <div class="gp-cta-sub" style="max-width:440px;line-height:1.7">En breve nos pondremos en contacto contigo para mostrarte tu ScalePlan en detalle y que puedas empezar a escalar lo antes posible.</div>
+  <button class="gp-submit" onclick="goTo('page-ty')">Ver mis próximos pasos →</button>
+
+  <p style="font-size:13px;color:var(--muted);margin-top:1.2rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px" onclick="goTo('page-landing')">← Volver a la página principal</p>
+</div>
+
+<!-- ═══════════ THANK YOU ═══════════ -->
+<div class="page" id="page-ty" style="display:none;align-items:center;justify-content:center;flex-direction:column;padding:6rem 1.5rem 3rem;text-align:center;min-height:100vh">
+  <div class="ty-icon">✓</div>
+  <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:800;margin-bottom:1rem;letter-spacing:-0.5px" id="ty-title">Tu ScalePlan está en camino</h2>
+  <p style="font-size:16px;color:var(--muted);max-width:480px;line-height:1.7;margin-bottom:0">En breve nos pondremos en contacto contigo para mostrarte tu ScalePlan en detalle y que puedas empezar a escalar lo antes posible.</p>
+  <div class="ty-card">
+    <div class="ty-steps">
+      <div class="ty-step"><div class="ty-num">1</div><div class="ty-step-text"><strong>Estamos revisando tu perfil</strong> — En breve un miembro del equipo se pondrá en contacto contigo.</div></div>
+      <div class="ty-step"><div class="ty-num">2</div><div class="ty-step-text"><strong>Empieza el paso 1</strong> — La acción imperfecta siempre gana a la perfección paralizada.</div></div>
+      <div class="ty-step"><div class="ty-num">3</div><div class="ty-step-text"><strong>Únete al Knowledge Scale Plan</strong> — Para empezar ya tu cambio.</div></div>
+    </div>
+  </div>
+  <div class="crm-notice" id="crm-status">✓ Tu perfil ha sido registrado en nuestro sistema</div>
+</div>
+
+<script>
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxdn5CfqoNgi-Mdn0GpiYapgzCkQlKtgF2yOwuUBBnfwAljUSuHsqcq03TYRAAf6PEx/exec';
+
+let userData={nombre:'',apellido:'',email:'',tel:''};
+let quizData={sector:'',tiempo:'',ingresos:'',cuello:'',razon:''};
+let curQ=1;
+
+function goTo(id){
+  document.querySelectorAll('.page').forEach(p=>{
+    p.style.display='none';
+    p.classList.remove('active');
+  });
+  let t=document.getElementById(id);
+  let flex=['page-datos','page-quiz','page-loading','page-gameplan','page-ty'];
+  t.style.display=flex.includes(id)?'flex':'block';
+  t.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function submitDatos(){
+  let n=document.getElementById('fNombre').value.trim();
+  let a=document.getElementById('fApellido').value.trim();
+  let e=document.getElementById('fEmail').value.trim();
+  let t=document.getElementById('fTel').value.trim();
+  if(!n){alert('Por favor ingresa tu nombre.');return;}
+  if(!e||!e.includes('@')){alert('Por favor ingresa un email válido.');return;}
+  userData={nombre:n,apellido:a,email:e,tel:t};
+  goTo('page-quiz');
+}
+
+function pick(el,key,val){
+  let parent=el.closest('.quiz-step-wrap');
+  parent.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  quizData[key]=val;
+  let qnum=parent.id.replace('q','');
+  let btn=document.getElementById('qnext'+qnum);
+  if(btn)btn.classList.add('on');
+}
+
+function nextQ(n){
+  document.getElementById('q'+(n-1)).style.display='none';
+  document.getElementById('q'+n).style.display='block';
+  curQ=n;
+  updateProgress(n);
+}
+
+function updateProgress(n){
+  for(let i=1;i<=5;i++){
+    let d=document.getElementById('sd'+i);
+    if(!d)continue;
+    d.className='quiz-step-dot'+(i<n?' done':i===n?' active':'');
+  }
+  document.getElementById('qcounter').textContent='Pregunta '+n+' de 5';
+}
+
+function checkQ5(){
+  let v=document.getElementById('q5text').value;
+  let c=document.getElementById('charCount');
+  let btn=document.getElementById('qnext5');
+  c.textContent=v.length+' / mínimo 30 caracteres';
+  if(v.length>=30){btn.classList.add('on');c.style.color='var(--gold)';}
+  else{btn.classList.remove('on');c.style.color='var(--muted)';}
+}
+
+const gameplans={
+  '$0 – $1,000/mes':{stage:'Stage 1 · Probar',items:[
+    {w:'Semana 1',t:'Define tu nicho y propuesta única de valor'},
+    {w:'Semana 3',t:'Lanza tu primer producto mínimo viable'},
+    {w:'Semana 5',t:'Primeras 10 ventas con tráfico orgánico'},
+    {w:'Semana 8',t:'Automatiza tu primer funnel de email'},
+    {w:'Semana 12',t:'Meta: $1,000–3,000/mes consistentes'}]},
+  '$1,000 – $5,000/mes':{stage:'Stage 2 · Construir',items:[
+    {w:'Semana 1',t:'Optimiza tu oferta y mensaje principal'},
+    {w:'Semana 3',t:'Activa tu primer canal de tráfico de pago'},
+    {w:'Semana 5',t:'Implementa seguimiento de leads calificados'},
+    {w:'Semana 8',t:'Crea tu segundo producto o upsell'},
+    {w:'Semana 12',t:'Meta: $5,000–10,000/mes estables'}]},
+  '$5,000 – $15,000/mes':{stage:'Stage 3 · Diferenciarte',items:[
+    {w:'Semana 1',t:'Fortalece tu marca personal online'},
+    {w:'Semana 3',t:'Lanza estrategia de contenido masivo'},
+    {w:'Semana 6',t:'Contrata tu primer setter o closer'},
+    {w:'Semana 9',t:'Optimiza ROAS y CPL en ads'},
+    {w:'Semana 14',t:'Meta: $20,000–40,000/mes'}]},
+  '$15,000 – $50,000/mes':{stage:'Stage 4 · Optimizar',items:[
+    {w:'Semana 1',t:'Audita tus métricas clave (CAC, LTV, churn)'},
+    {w:'Semana 3',t:'Sistematiza el onboarding de clientes'},
+    {w:'Semana 6',t:'Construye tu equipo de ventas'},
+    {w:'Semana 10',t:'Diversifica canales de adquisición'},
+    {w:'Semana 16',t:'Meta: $60,000–100,000/mes'}]},
+  '$50,000+/mes':{stage:'Stage 5 · Liderar',items:[
+    {w:'Semana 1',t:'Define tu visión de marca a 3 años'},
+    {w:'Semana 3',t:'Escala equipo directivo y operaciones'},
+    {w:'Semana 6',t:'Expande a nuevos mercados o idiomas'},
+    {w:'Semana 10',t:'Lanza programa de afiliados o comunidad premium'},
+    {w:'Semana 20',t:'Meta: $200,000–500,000/mes'}]}
+};
+
+function goLoading(){
+  quizData.razon=document.getElementById('q5text').value;
+  goTo('page-loading');
+  let steps=[['ls1',700],['ls2',1500],['ls3',2400],['ls4',3300],['ls5',4100]];
+  steps.forEach(([id,d])=>setTimeout(()=>{let el=document.getElementById(id);if(el)el.classList.add('done')},d));
+  sendToSheets();
+  setTimeout(buildGameplan,5000);
+}
+
+function buildGameplan(){
+  let gp=gameplans[quizData.ingresos]||gameplans['$0 – $1,000/mes'];
+  let t=document.getElementById('gp-title');
+  let s=document.getElementById('gp-stage');
+  let tl=document.getElementById('gp-timeline');
+  let n=document.getElementById('gp-cta-name');
+  if(t)t.textContent=userData.nombre?userData.nombre+', aquí está tu Hoja de Ruta':'Tu Hoja de Ruta';
+  if(s)s.textContent=gp.stage+' · Sector: '+quizData.sector;
+  if(tl)tl.innerHTML=gp.items.map((item,i)=>
+    `<div class="tl-item" style="opacity:${i>2?0.25:1}">
+      <div class="tl-dot"></div>
+      <div class="tl-week">${item.w}</div>
+      <div class="tl-text">${item.t}</div>
+    </div>`).join('');
+  if(n)n.textContent=userData.nombre?userData.nombre+', tu Gameplan está listo':'Tu Gameplan está listo';
+  let tyT=document.getElementById('ty-title');
+  if(tyT)tyT.textContent=userData.nombre?'¡Listo, '+userData.nombre+'!':'¡Listo!';
+  goTo('page-gameplan');
+}
+
+function sendToSheets(){
+  let payload={
+    timestamp:new Date().toISOString(),
+    nombre:userData.nombre,
+    apellido:userData.apellido,
+    email:userData.email,
+    telefono:userData.tel,
+    sector:quizData.sector,
+    tiempo:quizData.tiempo,
+    ingresos:quizData.ingresos,
+    cuello:quizData.cuello,
+    razon:quizData.razon
+  };
+  let crm=document.getElementById('crm-status');
+  if(SHEET_URL==='TU_APPS_SCRIPT_URL_AQUI'){
+    if(crm)crm.textContent='⚠ Conecta tu Google Sheet para guardar leads (ver instrucciones)';
+    return;
+  }
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'}})
+    .then(()=>{if(crm)crm.textContent='✓ Tu perfil ha sido registrado en nuestro sistema';})
+    .catch(()=>{if(crm)crm.textContent='Revisa la conexión con Google Sheets';});
+}
+</script>
+</body>
+</html>
