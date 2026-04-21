@@ -14,6 +14,10 @@
 html{scroll-behavior:smooth}
 body{background:var(--dark);color:var(--white);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden}
 
+/* ── FONDO INTERACTIVO ── */
+#ks-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.page,.quiz-section,.loading-section,.capture-section,.ty-section,nav{position:relative;z-index:1}
+
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,10,0.9);backdrop-filter:blur(14px);border-bottom:0.5px solid var(--border)}
 .nav-logo{font-size:13px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
@@ -175,6 +179,8 @@ h1 em{font-style:normal;color:var(--gold)}
 </head>
 <body>
 
+<canvas id="ks-canvas"></canvas>
+
 <nav>
   <div class="nav-logo">Knowledge Scale</div>
 </nav>
@@ -205,12 +211,17 @@ h1 em{font-style:normal;color:var(--gold)}
   <section class="who-section">
     <div class="section-tag">Quién está detrás de Knowledge Scale</div>
     <div class="who-grid">
-      <div class="who-avatar-box">
-        <div class="who-avatar-inner">
-          <div class="avatar-circle">KS</div>
-          <div class="avatar-name">Fundador · Knowledge Scale</div>
-          <div class="avatar-role">Estratega de Infoproductos</div>
-          <div class="who-pills">
+      <div class="who-avatar-box" style="padding:0;overflow:hidden;background:var(--dark3);display:flex;flex-direction:column">
+        <img src="https://i.imgur.com/placeholder.jpg" id="kamalPhoto" alt="Kamal Jamhoune — Knowledge Scale" style="width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center top;display:block" onerror="this.style.display='none';document.getElementById('avatarFallback').style.display='flex'">
+        <div id="avatarFallback" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2.5rem;flex:1">
+          <div class="avatar-circle">KJ</div>
+          <div class="avatar-name">Kamal Jamhoune</div>
+          <div class="avatar-role">Fundador · Knowledge Scale</div>
+        </div>
+        <div style="background:rgba(10,10,10,0.85);padding:14px 18px;border-top:0.5px solid rgba(212,168,67,0.2)">
+          <div style="font-size:14px;font-weight:700;color:#fff">Kamal Jamhoune</div>
+          <div style="font-size:11px;color:#D4A843;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-top:2px">Fundador · Knowledge Scale</div>
+          <div class="who-pills" style="margin-top:8px">
             <span class="who-pill">Marketing</span>
             <span class="who-pill">Infoproductos</span>
             <span class="who-pill">Escala</span>
@@ -238,7 +249,7 @@ h1 em{font-style:normal;color:var(--gold)}
       <div class="section-header">
         <div class="section-tag" style="text-align:center">Lo que dicen los que ya lo hicieron</div>
         <h2>Resultados reales,<br><em style="font-style:normal;color:var(--gold)">sin promesas vacías</em></h2>
-        <p>2 de 2 personas que siguieron el gameplan en 2026 tienen hoy un negocio de infoproductos estable y en crecimiento.</p>
+        <p>2 de 2 personas que siguieron el ScalePlan en 2026 tienen hoy un negocio de infoproductos estable y en crecimiento.</p>
       </div>
       <!-- VIDEO CAROUSEL -->
       <div class="vid-carousel">
@@ -246,56 +257,42 @@ h1 em{font-style:normal;color:var(--gold)}
 
           <div class="vid-slide active" data-index="0">
             <div class="vid-frame">
-              <div class="vid-placeholder">
-                <div class="vid-play-icon">▶</div>
-                <div class="vid-info">
-                  <div class="vid-name">María C.</div>
-                  <div class="vid-role">Coach de productividad · España</div>
-                  <div class="vid-result">⚡ De $0 a $2,000/mes en 60 días</div>
-                </div>
-                <div class="vid-url-hint">Pega aquí tu URL de video</div>
-              </div>
-              <!-- Reemplaza el div.vid-placeholder por: <iframe src="TU_URL_EMBED" frameborder="0" allowfullscreen></iframe> -->
+              <iframe src="https://player.vimeo.com/video/1185232281?badge=0&autopause=0&player_id=0&app_id=58479" frameborder="0" allowfullscreen allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" style="width:100%;height:100%;border:none"></iframe>
             </div>
             <div class="vid-caption">
               <div class="vid-stars">★★★★★</div>
-              <div class="vid-quote">"De $0 a mis primeros $2,000/mes en solo 60 días."</div>
+              <div class="vid-name" style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">Marwane</div>
+              <div class="vid-role" style="font-size:12px;color:#9A9A9A;margin-bottom:8px">Importación de coches · España</div>
+              <div class="vid-quote">"En menos de 30 días ha conseguido clientes de manera totalmente orgánica."</div>
             </div>
           </div>
 
           <div class="vid-slide" data-index="1">
             <div class="vid-frame">
-              <div class="vid-placeholder">
-                <div class="vid-play-icon">▶</div>
-                <div class="vid-info">
-                  <div class="vid-name">Jorge R.</div>
-                  <div class="vid-role">Consultor de fitness · México</div>
-                  <div class="vid-result">⚡ Negocio estable en 6 meses</div>
-                </div>
-                <div class="vid-url-hint">Pega aquí tu URL de video</div>
-              </div>
+              <iframe src="https://player.vimeo.com/video/1185233743?badge=0&autopause=0&player_id=0&app_id=58479" frameborder="0" allowfullscreen allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" style="width:100%;height:100%;border:none"></iframe>
             </div>
             <div class="vid-caption">
               <div class="vid-stars">★★★★★</div>
-              <div class="vid-quote">"Hoy vivo de lo que me apasiona gracias a un plan claro."</div>
+              <div class="vid-name" style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">Jesús Sandoval</div>
+              <div class="vid-role" style="font-size:12px;color:#9A9A9A;margin-bottom:8px">Coach Fitness · Colombia</div>
+              <div class="vid-quote">"En menos de 2 meses ha conseguido un flujo de clientes estable de manera totalmente orgánica."</div>
             </div>
           </div>
 
           <div class="vid-slide" data-index="2">
             <div class="vid-frame">
               <div class="vid-placeholder">
-                <div class="vid-play-icon">▶</div>
+                <div class="vid-play-icon" style="font-size:28px">👤</div>
                 <div class="vid-info">
-                  <div class="vid-name">Tu próximo testimonio</div>
-                  <div class="vid-role">Añade aquí tu tercer caso de éxito</div>
-                  <div class="vid-result">⚡ Resultado aquí</div>
+                  <div class="vid-name" style="font-size:18px;font-weight:800">El próximo testimonio eres tú</div>
+                  <div class="vid-role" style="margin-top:8px">Rellena el cuestionario en menos de 2 minutos</div>
+                  <div class="vid-result" style="color:#D4A843;font-size:15px;font-weight:800;margin-top:10px;background:none;border:none;padding:0">No sigas esperando.</div>
                 </div>
-                <div class="vid-url-hint">Pega aquí tu URL de video</div>
               </div>
             </div>
             <div class="vid-caption">
               <div class="vid-stars">★★★★★</div>
-              <div class="vid-quote">"Tu cita de testimonio aquí."</div>
+              <div class="vid-quote" style="font-size:15px;color:#fff;font-style:normal;line-height:1.7">Marwane y Jesús lo decidieron. Tú llevas tiempo pensándolo.<br><span style="color:#D4A843;font-weight:600">El único paso que falta es el primero.</span></div>
             </div>
           </div>
 
