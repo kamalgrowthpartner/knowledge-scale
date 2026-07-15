@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ScalePlan™ — Bienvenida y Expectativas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#D4A843;--gold-light:#F5E6B8;--dark:#0A0A0A;--white:#FFFFFF;--muted:#9A9A9A;--border:rgba(255,255,255,0.08);--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif}
+html,body{min-height:100%;background:var(--dark);color:var(--white);font-family:var(--mono)}
+body{padding:0}
+
+/* SCANLINES + NOISE, matching brand system */
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,0.012) 3px,rgba(255,255,255,0.012) 4px);pointer-events:none;z-index:9999}
+body::before{content:'';position:fixed;inset:0;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");pointer-events:none;z-index:9998}
+
+.wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:4rem 1.5rem 6rem}
+
+/* LOGO / HEADER */
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:2.5rem}
+.brand svg{width:22px;height:22px}
+.brand-name{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:4px;color:var(--gold);text-transform:uppercase}
+
+.head{max-width:560px;width:100%;margin-bottom:2.5rem}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+.title{font-family:var(--sans);font-size:clamp(1.9rem,5vw,2.8rem);font-weight:800;line-height:1.08;letter-spacing:-1.2px;margin-bottom:1.1rem}
+.title em{font-style:normal;color:var(--gold)}
+.sub{font-family:var(--mono);font-size:12.5px;color:var(--muted);line-height:1.8}
+.sub b{color:var(--white);font-weight:500}
+
+/* FORM CARD */
+.card{max-width:560px;width:100%;background:rgba(255,255,255,0.02);border:0.5px solid var(--border);border-radius:8px;padding:2.2rem}
+.field{margin-bottom:2rem}
+.field:last-of-type{margin-bottom:0}
+.q-label{font-family:var(--mono);font-size:10px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:4px}
+.q-text{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--white);line-height:1.4;margin-bottom:12px}
+.q-hint{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:-6px;margin-bottom:12px;line-height:1.6}
+.req{color:var(--gold)}
+
+.inp,textarea.inp{background:rgba(255,255,255,0.04);border:0.5px solid var(--border);border-radius:4px;padding:14px 16px;color:var(--white);font-size:14px;font-family:var(--mono);outline:none;width:100%;transition:border-color .2s;letter-spacing:.3px}
+textarea.inp{resize:vertical;min-height:90px;line-height:1.6}
+.inp::placeholder{color:rgba(255,255,255,0.22);font-size:12px}
+.inp:focus{border-color:rgba(212,168,67,0.6)}
+
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;border:0.5px solid var(--border);border-radius:4px;cursor:pointer;transition:all .15s;background:rgba(255,255,255,0.015)}
+.opt:hover{border-color:rgba(212,168,67,0.35)}
+.opt.checked{border-color:var(--gold);background:rgba(212,168,67,0.06)}
+.opt input{accent-color:var(--gold);margin-top:2px;flex-shrink:0;cursor:pointer}
+.opt span{font-family:var(--mono);font-size:12.5px;color:var(--white);line-height:1.6}
+.other-inp{margin-top:8px;display:none}
+.other-inp.show{display:block}
+
+.submit-row{margin-top:2.6rem}
+.btn-submit{background:var(--gold);color:#0A0A0A;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:15px;border:none;border-radius:4px;cursor:pointer;width:100%;transition:all .2s}
+.btn-submit:hover{background:var(--gold-light)}
+.btn-submit:disabled{opacity:.3;pointer-events:none}
+.form-meta{font-family:var(--mono);font-size:9.5px;color:rgba(255,255,255,0.25);text-align:center;margin-top:1.2rem;letter-spacing:1.5px}
+
+/* SUCCESS */
+#success{display:none;max-width:560px;width:100%;text-align:center}
+#success.show{display:block}
+.card.hide{display:none}
+.head.hide{display:none}
+.s-title{font-family:var(--sans);font-size:clamp(1.9rem,5vw,2.8rem);font-weight:800;letter-spacing:-1.2px;margin-bottom:1rem;line-height:1.1}
+.s-title em{font-style:normal;color:var(--gold)}
+.s-sub{font-family:var(--mono);font-size:12.5px;color:var(--muted);line-height:1.8;max-width:420px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="brand">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="14" width="4" height="8" fill="#D4A843"/>
+      <rect x="10" y="9" width="4" height="13" fill="#D4A843"/>
+      <rect x="18" y="3" width="4" height="19" fill="#D4A843"/>
+    </svg>
+    <div class="brand-name">ScalePlan™</div>
+  </div>
+
+  <div class="head" id="headBlock">
+    <div class="eyebrow">Bienvenida · ScalePlan™</div>
+    <div class="title">Antes de empezar,<br>hablemos de <em>tus objetivos.</em></div>
+    <div class="sub">Para llevarte del <b>Punto A (donde estás hoy)</b> al <b>Punto B (donde quieres llegar)</b>, necesitamos que reflexiones estas preguntas con cabeza — ya sea que trabajes en la comunidad de ScalePlan o 1:1 dentro del programa.</div>
+  </div>
+
+  <div class="card" id="formCard">
+    <form id="scaleplanForm">
+
+      <div class="field">
+        <div class="q-label">01</div>
+        <div class="q-text">Nombre y apellido <span class="req">*</span></div>
+        <div class="q-hint">Con el que te registraste en la comunidad ScalePlan.</div>
+        <input class="inp" type="text" id="fNombre" placeholder="Tu nombre completo" required oninput="validate()">
+      </div>
+
+      <div class="field">
+        <div class="q-label">02</div>
+        <div class="q-text">Email <span class="req">*</span></div>
+        <div class="q-hint">El mismo con el que te registraste.</div>
+        <input class="inp" type="email" id="fEmail" placeholder="tu@email.com" required oninput="validate()">
+      </div>
+
+      <div class="field">
+        <div class="q-label">03</div>
+        <div class="q-text">¿Qué esperas conseguir <u>exactamente</u> durante los próximos 90 o 365 días dentro de ScalePlan? <span class="req">*</span></div>
+        <div class="q-hint">Escribe un objetivo realista y medible.</div>
+        <textarea class="inp" id="fObjetivo" placeholder="Ej: Cerrar 3 clientes recurrentes de retainer mensual antes de octubre..." required oninput="validate()"></textarea>
+      </div>
+
+      <div class="field">
+        <div class="q-label">04</div>
+        <div class="q-text">Si tuvieras que escoger <u>una única</u> cosa que te esté frenando ahora mismo, ¿cuál sería? <span class="req">*</span></div>
+        <div class="opts" id="frenoOpts">
+          <label class="opt"><input type="radio" name="freno" value="No consigo clientes de forma constante, no tengo un sistema"><span>No consigo clientes de forma constante, todavía no tengo un sistema</span></label>
+          <label class="opt"><input type="radio" name="freno" value="Tengo tracción pero no es predecible ni escalable"><span>Tengo algo de tracción (leads, alguna venta) pero no es predecible ni escalable</span></label>
+          <label class="opt"><input type="radio" name="freno" value="El negocio avanza pero mi mentalidad me frena"><span>El negocio avanza, pero mi cabeza me frena: el miedo, la sobrecarga, la falta de foco</span></label>
+          <label class="opt"><input type="radio" name="freno" value="other"><span>Otro:</span></label>
+        </div>
+        <input class="inp other-inp" id="fFrenoOther" type="text" placeholder="Cuéntanos qué te frena" oninput="validate()">
+      </div>
+
+      <div class="field">
+        <div class="q-label">05</div>
+        <div class="q-text">¿Qué vas a comprometerte a hacer <u>tú</u> para 1) cumplir tu objetivo y 2) erradicar el freno que mencionaste? <span class="req">*</span></div>
+        <div class="opts" id="compromisoOpts">
+          <label class="opt"><input type="radio" name="compromiso" value="Participar activamente, aplicar cada módulo en orden y compartir resultados en la comunidad"><span>Participar activamente, aplicar cada módulo en orden y compartir mis resultados en la comunidad</span></label>
+          <label class="opt"><input type="radio" name="compromiso" value="Ir a mi ritmo, sin comprometerme del todo"><span>Ir a mi ritmo, participar a veces y sin comprometerme del todo</span></label>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button type="button" class="btn-submit" id="btnSubmit" disabled onclick="submitForm()">Enviar respuestas →</button>
+      </div>
+      <div class="form-meta">SCALE PLAN™ · TUS RESPUESTAS SON CONFIDENCIALES</div>
+    </form>
+  </div>
+
+  <div id="success">
+    <div class="s-title">Recibido<span id="sName"></span>.<br>Vamos a por el <em>Punto B.</em></div>
+    <div class="s-sub">Guardamos tus respuestas. Las usaremos para adaptar tu acompañamiento dentro de ScalePlan y hacerte seguimiento en base a tu objetivo real.</div>
+  </div>
+</div>
+
+<script>
+// Pega aquí la URL de tu Google Apps Script Web App (ver instrucciones)
+var WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzmve7I9gjtzzScvgXtsD0cbmIfAxHCDJgzlkpVv7G-8XS_eIN3AaPP7zaNW3kpWjgsBA/exec";
+
+document.querySelectorAll('input[name="freno"]').forEach(function(r){
+  r.addEventListener('change', function(){
+    document.querySelectorAll('#frenoOpts .opt').forEach(function(o){o.classList.remove('checked')});
+    this.closest('.opt').classList.add('checked');
+    var otherInp = document.getElementById('fFrenoOther');
+    if(this.value === 'other'){ otherInp.classList.add('show'); } else { otherInp.classList.remove('show'); otherInp.value=''; }
+    validate();
+  });
+});
+document.querySelectorAll('input[name="compromiso"]').forEach(function(r){
+  r.addEventListener('change', function(){
+    document.querySelectorAll('#compromisoOpts .opt').forEach(function(o){o.classList.remove('checked')});
+    this.closest('.opt').classList.add('checked');
+    validate();
+  });
+});
+
+function validate(){
+  var nombre = document.getElementById('fNombre').value.trim();
+  var email = document.getElementById('fEmail').value.trim();
+  var objetivo = document.getElementById('fObjetivo').value.trim();
+  var freno = document.querySelector('input[name="freno"]:checked');
+  var frenoOther = document.getElementById('fFrenoOther').value.trim();
+  var compromiso = document.querySelector('input[name="compromiso"]:checked');
+
+  var frenoOk = freno && (freno.value !== 'other' || frenoOther.length > 1);
+  var ok = nombre.length > 1 && email.includes('@') && objetivo.length > 5 && frenoOk && compromiso;
+  document.getElementById('btnSubmit').disabled = !ok;
+}
+
+function submitForm(){
+  var btn = document.getElementById('btnSubmit');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  var freno = document.querySelector('input[name="freno"]:checked');
+  var frenoValor = freno ? freno.value : '';
+  var frenoDetalle = frenoValor === 'other' ? document.getElementById('fFrenoOther').value.trim() : '';
+  var compromiso = document.querySelector('input[name="compromiso"]:checked');
+
+  var payload = {
+    nombre: document.getElementById('fNombre').value.trim(),
+    email: document.getElementById('fEmail').value.trim(),
+    objetivo: document.getElementById('fObjetivo').value.trim(),
+    freno: frenoValor === 'other' ? 'Otro' : frenoValor,
+    frenoDetalle: frenoDetalle,
+    compromiso: compromiso ? compromiso.value : ''
+  };
+
+  function showSuccess(){
+    var nombre = payload.nombre.split(' ')[0];
+    document.getElementById('sName').textContent = nombre ? ', ' + nombre : '';
+    document.getElementById('headBlock').classList.add('hide');
+    document.getElementById('formCard').classList.add('hide');
+    document.getElementById('success').classList.add('show');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  if(!WEBHOOK_URL || WEBHOOK_URL.indexOf('PEGA_AQUI') !== -1){
+    // Sin webhook configurado todavía: solo muestra el éxito localmente
+    showSuccess();
+    return;
+  }
+
+  // Apps Script Web Apps no soportan bien CORS con JSON normal,
+  // por eso se usa 'text/plain' + no-cors (patrón estándar para este caso)
+  fetch(WEBHOOK_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  }).then(function(){
+    showSuccess();
+  }).catch(function(){
+    // Con no-cors no podemos leer la respuesta ni detectar errores reales del servidor,
+    // así que mostramos éxito igualmente; los datos suelen llegar.
+    showSuccess();
+  });
+}
+</script>
+</body>
+</html>
