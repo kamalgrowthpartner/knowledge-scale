@@ -136,7 +136,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 <!-- ══ PANTALLA 1: DATOS ══ -->
 <div class="screen on" id="s-capture">
   <div class="capture-card">
-    <div class="ks-tag">Knowledge Scale™ · Análisis Gratuito</div>
+    <div class="ks-tag">ScalePlan™ · Análisis Gratuito</div>
     <div class="social-proof"><span class="stars">★★★★★</span> 2/2 casos de éxito ya tienen un negocio estable online</div>
     <div class="capture-title">¿Cuánto dinero estás<br><em>dejando ir</em> cada mes?</div>
     <div class="capture-sub">Tienes seguidores. Publicas contenido. Pero los ingresos no reflejan lo que mereces. <strong>En 30 segundos te decimos exactamente cuánto estás perdiendo y cómo arreglarlo.</strong></div>
@@ -271,7 +271,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
         <div class="cf">
           <label>Tiempo publicando contenido <span id="lbl-time">—</span></label>
-          <select class="cs" id="tiempo" onchange="calc();triggerSend()">
+          <select class="cs" id="tiempo" onchange="onTiempoChange()">
+            <option value="">Selecciona una opción</option>
             <option value="0">Menos de 3 meses</option>
             <option value="1">3 a 12 meses</option>
             <option value="2">1 a 2 años</option>
@@ -342,7 +343,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
           <a class="btn-gold" href="https://calendly.com/kamalgrowthpartner/30min" target="_blank">📅 Quiero mi diagnóstico gratuito →</a>
           <a class="btn-outline" href="https://kamalgrowthpartner.github.io/knowledge-scale" target="_blank">Ver el ScalePlan</a>
         </div>
-        <div class="cta-note">GRATIS · 30 MINUTOS · SIN COMPROMISO · KNOWLEDGE SCALE™</div>
+        <div class="cta-note">GRATIS · 30 MINUTOS · SIN COMPROMISO · SCALEPLAN™</div>
       </div>
 
     </div>
@@ -351,15 +352,16 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
 <script>
 // ── CAPTURE ──
-var CALC_SHEET_URL='https://script.google.com/macros/s/AKfycbzWCg0ca066Ywc_bdmg5BDtO1toKlQsWWtRlu9uB6PiZVITbfqJxt5f5YWLGZVnQ-v7/exec';
+var CALC_SHEET_URL='https://script.google.com/macros/s/AKfycbyCTmRIKsWNYVTn7T_1WrDILuYL7jgN6bPeBZSgBpypBIjyizjxLFMRJVuQuXNzY-3-/exec';
 var leadSent=false;
 
 function sendCalcToSheets(pot,perd,efi,sc){
   try{
     if(leadSent)return;
+    leadSent=true;
     var paisVal=document.getElementById('c-pais').value;
     var paisCode=paisVal?'+'+paisVal.split('-')[0]:'';
-    var telClean=document.getElementById('c-tel').value.replace(/[\s\-\(\)]/g,'');
+    var telVal=document.getElementById('c-tel').value.trim();
     var nichoEl=document.getElementById('nicho');
     var nichoText=nichoEl.options[nichoEl.selectedIndex].textContent;
     var prodEl=document.getElementById('prod');
@@ -367,10 +369,11 @@ function sendCalcToSheets(pot,perd,efi,sc){
     var tiempoEl=document.getElementById('tiempo');
     var tiempoText=tiempoEl.options[tiempoEl.selectedIndex].textContent;
     var payload={
+      timestamp:new Date().toISOString(),
       nombre:document.getElementById('c-nombre').value.trim(),
       email:document.getElementById('c-email').value.trim(),
       pais:paisCode,
-      telefono:telClean,
+      telefono:paisCode+' '+telVal,
       nicho:nichoText,
       seguidores:String(document.getElementById('seg').value),
       ingresos:String(document.getElementById('ing').value),
@@ -383,10 +386,9 @@ function sendCalcToSheets(pot,perd,efi,sc){
       eficiencia:String(efi),
       score:String(sc)
     };
-    var encoded=encodeURIComponent(JSON.stringify(payload));
+    var url=CALC_SHEET_URL+'?data='+encodeURIComponent(JSON.stringify(payload));
     var img=new Image();
-    img.src=CALC_SHEET_URL+'?data='+encoded;
-    leadSent=true;
+    img.src=url;
   }catch(err){
     console.log('Error enviando lead:',err);
   }
@@ -617,25 +619,30 @@ function calc(){
       document.getElementById('urgency').textContent=urgMsg;
 }
 
-function triggerSend(){
-  var nk=document.getElementById('nicho').value;
-  if(!nk||leadSent)return;
-  var nd=N[nk];
+// ── ENVÍO SOLO AL SELECCIONAR TIEMPO ──
+function onTiempoChange(){
+  calc();
+  if(leadSent)return;
+  var tiempo=document.getElementById('tiempo').value;
+  var nicho=document.getElementById('nicho').value;
+  if(!tiempo||!nicho)return;
+  var nd=N[nicho];
   var seg=parseFloat(document.getElementById('seg').value);
   var ing=parseFloat(document.getElementById('ing').value);
   var his=parseFloat(document.getElementById('his').value);
   var reels=parseFloat(document.getElementById('reels').value);
   var prod=document.getElementById('prod').value;
-  var tiempo=parseInt(document.getElementById('tiempo').value);
+  var tiempoNum=parseInt(tiempo);
   var prodMult={no:0.3,servicio:0.8,curso:1.0,mentoria:1.2,mixto:1.4}[prod]||1;
-  var tiempoMult=[0.6,0.85,1.0,1.15][tiempo]||1;
+  var tiempoMult=[0.6,0.85,1.0,1.15][tiempoNum]||1;
   var reelsMult=1+Math.min(reels,14)*0.04;
-  var potBase=seg*nd.vps*prodMult*tiempoMult*reelsMult;
-  var potStories=his*30*nd.convBase*prodMult*2.5;
-  var potencial=Math.round(potBase+potStories);
+  var hisMult=1+Math.min(his/5000,1)*0.25;
+  var potBase=seg*nd.vps*prodMult*tiempoMult*reelsMult*hisMult;
+  var maxPot=seg<5000?2500:seg<10000?6000:seg<50000?25000:seg<100000?60000:150000;
+  var potencial=Math.min(Math.round(potBase),maxPot);
   var perdida=Math.max(0,potencial-ing);
   var efi=potencial>0?Math.min(100,Math.round((ing/potencial)*100)):0;
-  var score=Math.min(99,Math.round(efi*0.5+(reels/7)*25+(his/5000)*15+(tiempo*5)));
+  var score=Math.min(99,Math.round(efi*0.5+(reels/7)*25+(his/5000)*15+(tiempoNum*5)));
   sendCalcToSheets(potencial,perdida,efi,score);
 }
 
